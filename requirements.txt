@@ -1,0 +1,2 @@
+async-lru==2.0.4
+Flask[async]==3.0.3
