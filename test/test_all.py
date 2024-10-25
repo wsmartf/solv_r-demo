@@ -1,11 +1,12 @@
 import sys
 import os
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 import json
-from app.greeting import create_greeting
 from app.calculator import calculate
-from app.hello_world_server import app
+import app.calculator_server
+
 class TestRunner:
     """Simple test runner that can be executed with plain Python"""
     
@@ -35,47 +36,6 @@ class TestRunner:
         if actual != expected:
             raise AssertionError(message or f"Expected {expected}, but got {actual}")
 
-def test_greeting_logic():
-    """Unit tests for greeting logic"""
-    # Test default greeting
-    result = create_greeting()
-    assert result == "Hello, World!", "Default greeting failed"
-    
-    # Test custom name
-    result = create_greeting("Alice")
-    assert result == "Hello, Alice!", "Custom greeting failed"
-    
-    # Test empty name
-    result = create_greeting("")
-    assert result == "Hello, !", "Empty name greeting failed"
-    
-    # Test None name
-    result = create_greeting(None)
-    assert result == "Hello, World!", "None name greeting failed"
-
-def test_flask_endpoints():
-    """Integration tests for Flask endpoints"""
-    client = app.test_client()
-    
-    # Test root endpoint
-    response = client.get('/')
-    assert response.status_code == 200, "Root endpoint status code failed"
-    assert response.data.decode('utf-8') == "Hello, World!", "Root endpoint response failed"
-    
-    # Test greet endpoint default
-    response = client.get('/greet')
-    assert response.status_code == 200, "Greet endpoint default status code failed"
-    assert response.data.decode('utf-8') == "Hello, World!", "Greet endpoint default response failed"
-    
-    # Test greet endpoint with name
-    response = client.get('/greet?name=Alice')
-    assert response.status_code == 200, "Greet endpoint with name status code failed"
-    assert response.data.decode('utf-8') == "Hello, Alice!", "Greet endpoint with name response failed"
-    
-    # Test non-existent endpoint
-    response = client.get('/nonexistent')
-    assert response.status_code == 404, "Non-existent endpoint status code failed"
-
 def test_calculator_logic():
     """Unit tests for calculator logic"""
     # Test addition
@@ -103,7 +63,7 @@ def test_calculator_logic():
 
 def test_calculator_endpoint():
     """Integration tests for calculator endpoint"""
-    client = app.test_client()
+    client = app.calculator_server.app.test_client()
     
     # Test successful calculation
     data = {
@@ -147,14 +107,8 @@ if __name__ == '__main__':
     # Create and run test suite
     runner = TestRunner()
     
-    print("=== Running Greeting Logic Tests ===")
-    runner.run_test(test_greeting_logic)
-    
     print("\n=== Running Calculator Logic Tests ===")
     runner.run_test(test_calculator_logic)
-    
-    print("\n=== Running Flask Endpoint Tests ===")
-    runner.run_test(test_flask_endpoints)
     
     print("\n=== Running Calculator Endpoint Tests ===")
     runner.run_test(test_calculator_endpoint)

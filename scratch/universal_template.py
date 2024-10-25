@@ -28,7 +28,7 @@ class TestSession:
 
         # Try to import Flask app if it exists
         try:
-            from app.hello_world_server import app
+            from app.calculator_server import app
             self.tester = MinimalTester(flask_app=app)
             self.has_flask = True
             print("Flask app found and initialized")

@@ -1,18 +1,12 @@
-from flask import Flask, request, jsonify
-from calculator import calculate, evaluate_equation
-from greeting import create_greeting
+from flask import Flask, request, jsonify, render_template
+from app.calculator import calculate, evaluate_equation
 app = Flask(__name__)
 
 
 @app.route("/")
-def hello_world():
-    return "Hello, World!"
+def calculator_ui():
+    return render_template('calculator.html')
 
-
-@app.route("/greet")
-def greet():
-    name = request.args.get('name')
-    return create_greeting(name)
 
 @app.route("/calculate", methods=['POST'])
 def calculator():
