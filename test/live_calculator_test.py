@@ -9,7 +9,7 @@ def start_server():
     """Start the Flask server as a subprocess"""
     server_file = os.path.join(
         os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        'src', 'app', 'hello_world_server.py'
+        'solv_r-demo', 'app', 'calculator_server.py'
     )
     env = os.environ.copy()
     env['PYTHONPATH'] = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -21,7 +21,7 @@ def start_server():
 
 def make_calculation(operation=None, numbers=None, equation=None):
     """Make a POST request to the calculator endpoint"""
-    url = 'http://localhost:5000/calculate'
+    url = 'http://localhost:5000'
     
     if equation is not None:
         data = json.dumps({"equation": equation})
